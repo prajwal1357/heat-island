@@ -1,6 +1,6 @@
 import { startTransition, useEffect, useState } from "react";
 import ConstituencyMap from "./components/ConstituencyMap";
-import InterventionPanel from "./components/InterventionPanel";
+import InterventionOutcomePanel from "./components/InterventionOutcomePanel";
 import PlannerChat from "./components/PlannerChat";
 import { getGrid, refreshWeather } from "./api";
 
@@ -161,7 +161,7 @@ export default function DashboardApp() {
               onSelectZone={setSelectedZoneId}
             />
             <div className="flex-1 min-h-[300px]">
-              <InterventionPanel key={selectedZone?.id ?? "empty"} selectedZone={selectedZone} />
+              <InterventionOutcomePanel key={selectedZone?.id ?? "empty"} selectedZone={selectedZone} />
             </div>
           </div>
 
