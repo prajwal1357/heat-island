@@ -1,33 +1,27 @@
-import os
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.routes import router
-from data.generator import generate_grid, generate_training_data
+from data.generator import generate_training_data
+from data.weather_cache import load_backend_env, read_live_weather_cache
 from ml.model import TempModel
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # --- Startup ---
-    print("Initializing City Grid Data Layer...")
-    app.state.grid = generate_grid()
-    
-    print("Loading ML Prediction Layer...")
+    load_backend_env()
+
+    print("Initializing Bengaluru constituency cache...")
+    cache_payload = read_live_weather_cache()
+    app.state.grid = cache_payload["zones"]
+
+    print("Training ML prediction layer from cached weather baseline...")
     model = TempModel()
-    
-    # If the model.joblib exists, it loads instantly.
-    # Otherwise, it automatically generates synthetic data & trains right now.
-    if not model.load():
-        print("Model not found on disk. Training a new model now (this takes ~3s)...")
-        training_df = generate_training_data(app.state.grid, samples=5000)
-        model.train(training_df)
-    else:
-        print("ML Model successfully loaded from disk!")
-        
+    training_df = generate_training_data(app.state.grid, samples=5000)
+    model.train(training_df)
     app.state.model = model
-    
+
     yield
-    # --- Shutdown ---
     app.state.grid.clear()
 
 

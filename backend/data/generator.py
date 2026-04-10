@@ -26,7 +26,7 @@ def generate_grid(n=100):
     return grid
 
 def generate_training_data(grid, samples=5000):
-    """Generate training samples by jittering the base 100 grid features."""
+    """Generate training samples anchored to the current cached baseline."""
     training_data = []
     
     # 10% of the value range for each feature as the standard deviation for jitter
@@ -38,10 +38,10 @@ def generate_training_data(grid, samples=5000):
     }
     
     for _ in range(samples):
-        # Pick a random base zone from the grid
         base_zone = np.random.choice(grid)
+        base_temp = float(base_zone["temp"])
+        base_formula_temp = compute_temp(base_zone)
         
-        # Jitter the features and clip them within valid bounds
         jittered = {
             "albedo": float(np.clip(base_zone["albedo"] + np.random.normal(0, std_dev["albedo"]), 0.1, 0.4)),
             "green_cover_pct": float(np.clip(base_zone["green_cover_pct"] + np.random.normal(0, std_dev["green_cover_pct"]), 0, 60)),
@@ -49,8 +49,9 @@ def generate_training_data(grid, samples=5000):
             "distance_to_water_km": float(np.clip(base_zone["distance_to_water_km"] + np.random.normal(0, std_dev["distance_to_water_km"]), 0, 5)),
         }
         
-        # Compute the jittered temperature
-        jittered["temp"] = compute_temp(jittered)
+        # Preserve the live/cache baseline and apply only the relative feature impact.
+        jittered_formula_temp = compute_temp(jittered)
+        jittered["temp"] = float(base_temp + (jittered_formula_temp - base_formula_temp))
         training_data.append(jittered)
         
     df = pd.DataFrame(training_data)
