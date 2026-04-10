@@ -3,15 +3,18 @@ import * as d3 from "d3";
 const VIEWBOX_WIDTH = 760;
 const VIEWBOX_HEIGHT = 660;
 
-function getFeatureCollection(zones) {
-  return {
-    type: "FeatureCollection",
-    features: zones.map((zone) => ({
-      type: "Feature",
-      geometry: zone.geometry,
-      properties: zone,
-    })),
-  };
+function flattenCoordinates(coordinates, output = []) {
+  if (!Array.isArray(coordinates)) {
+    return output;
+  }
+
+  if (typeof coordinates[0] === "number") {
+    output.push(coordinates);
+    return output;
+  }
+
+  coordinates.forEach((coordinate) => flattenCoordinates(coordinate, output));
+  return output;
 }
 
 function getPathData(zones) {
@@ -19,8 +22,24 @@ function getPathData(zones) {
     return [];
   }
 
-  const featureCollection = getFeatureCollection(zones);
-  const projection = d3.geoMercator().fitSize([VIEWBOX_WIDTH, VIEWBOX_HEIGHT], featureCollection);
+  const points = zones.flatMap((zone) => flattenCoordinates(zone.geometry.coordinates));
+  const lngs = points.map((point) => point[0]);
+  const lats = points.map((point) => point[1]);
+  const minLng = Math.min(...lngs);
+  const maxLng = Math.max(...lngs);
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+  const innerWidth = VIEWBOX_WIDTH - 80;
+  const innerHeight = VIEWBOX_HEIGHT - 80;
+  const lngSpan = Math.max(maxLng - minLng, 0.000001);
+  const latSpan = Math.max(maxLat - minLat, 0.000001);
+  const scale = Math.min(innerWidth / lngSpan, innerHeight / latSpan);
+  const offsetX = (VIEWBOX_WIDTH - lngSpan * scale) / 2;
+  const offsetY = (VIEWBOX_HEIGHT - latSpan * scale) / 2;
+  const projection = ([lng, lat]) => [
+    offsetX + (lng - minLng) * scale,
+    VIEWBOX_HEIGHT - (offsetY + (lat - minLat) * scale),
+  ];
   const line = d3.line().x((point) => point[0]).y((point) => point[1]);
 
   const ringToPath = (ring) => {
@@ -47,15 +66,15 @@ function getPathData(zones) {
     return "";
   };
 
-  return featureCollection.features.map((feature) => ({
-    id: feature.properties.id,
-    name: feature.properties.name,
-    temp: feature.properties.temp,
-    weather: feature.properties.weather,
-    center: feature.properties.center,
-    temp_source: feature.properties.temp_source,
-    path: geometryToPath(feature.geometry),
-    labelPoint: projection([feature.properties.center.lng, feature.properties.center.lat]),
+  return zones.map((zone) => ({
+    id: zone.id,
+    name: zone.name,
+    temp: zone.temp,
+    weather: zone.weather,
+    center: zone.center,
+    temp_source: zone.temp_source,
+    path: geometryToPath(zone.geometry),
+    labelPoint: projection([zone.center.lng, zone.center.lat]),
   }));
 }
 
