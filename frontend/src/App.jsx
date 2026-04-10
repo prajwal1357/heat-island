@@ -1,11 +1,13 @@
-import React from 'react'
+import Grid from "./components/Grid";
+import Planner from "./components/Planner";
 
-const App = () => {
+function App() {
   return (
-    <div className='text-amber-800'>
-      helo
+    <div style={{ display: "flex", gap: "40px" }}>
+      <Grid />
+      <Planner />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
