@@ -9,17 +9,23 @@ export default function HeatGrid({ gridData, selectedZone, onSelectZone }) {
 
     const width = 380;
     const height = 380;
-    // The design requests 10x10.
-    const cols = 10;
+    // Perfect 5x5 grid for 25 constituencies
+    const cols = 5;
     const cellSize = width / cols;
 
     const svg = d3.select(svgRef.current)
       .attr("width", width)
       .attr("height", height);
 
-    // Amber (42°C) to Teal (28°C) smooth interpolation.
+    // Dynamically calculate the extremes of the actual live data to exaggerate fractional micro-climates!
+    const tempExtent = d3.extent(gridData, d => d.temp);
+    // Add fallback padding incase all data exactly matches
+    const minD = tempExtent[0] === tempExtent[1] ? tempExtent[0] - 1 : tempExtent[0];
+    const maxD = tempExtent[0] === tempExtent[1] ? tempExtent[1] + 1 : tempExtent[1];
+
+    // Teal (Coolest local area) to Amber (Hottest local area) smooth interpolation.
     const colorScale = d3.scaleSequential(d3.interpolateRgb("#14b8a6", "#f59e0b"))
-      .domain([28, 42]);
+      .domain([minD, maxD]);
 
     const cells = svg.selectAll("rect")
       .data(gridData, d => d.id);
@@ -30,10 +36,15 @@ export default function HeatGrid({ gridData, selectedZone, onSelectZone }) {
       .attr("y", d => Math.floor(d.id / cols) * cellSize)
       .attr("width", cellSize - 2) // Space grid lines out slightly
       .attr("height", cellSize - 2)
-      .attr("rx", 4) // Beautiful rounded edges
+      .attr("rx", 6) // Beautiful rounded edges
       .style("cursor", "pointer")
-      .on("click", (event, d) => onSelectZone(d))
-      .merge(cells)
+      .on("click", (event, d) => onSelectZone(d));
+      
+    // Add Tooltips for constituency names
+    cells.enter().selectAll("rect").append("title")
+      .text(d => `${d.name || d.id}: ${d.temp}°C`);
+
+    cells.enter().selectAll("rect").merge(cells)
       .transition().duration(400) // Super fluid transitions when models update
       .attr("fill", d => colorScale(d.temp));
       

@@ -38,7 +38,7 @@ def load_backend_env() -> None:
         key, value = line.split("=", 1)
         key = key.strip()
         value = value.strip().strip("'\"")
-        os.environ.setdefault(key, value)
+        os.environ[key] = value
 
 
 def discover_geojson_path() -> Path:

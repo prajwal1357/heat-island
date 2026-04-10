@@ -3,8 +3,8 @@
   "zone_count": 25,
   "selection_note": "Excluded Yelahanka, Bangalore South, and Anekal to keep 25 core constituencies.",
   "source_geojson": "28add4af-0ee5-4f13-9c64-0e5b3927c321.geojson",
-  "last_refreshed_at": null,
-  "weather_provider": "cache-only",
+  "last_refreshed_at": "2026-04-10T18:43:34.026340+00:00",
+  "weather_provider": "Tomorrow.io",
   "zones": [
     {
       "id": 151,
@@ -16,12 +16,12 @@
         "lat": 13.01401,
         "lng": 77.676087
       },
-      "temp": 39.92,
-      "temp_source": "seed",
+      "temp": 26.17,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 39.92,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.17,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:23.063329+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -8037,12 +8037,12 @@
         "lat": 13.128927,
         "lng": 77.641079
       },
-      "temp": 34.75,
-      "temp_source": "seed",
+      "temp": 26.44,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 34.75,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.44,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:23.508280+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -16588,12 +16588,12 @@
         "lat": 12.890856,
         "lng": 77.450583
       },
-      "temp": 34.17,
-      "temp_source": "seed",
+      "temp": 27.06,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 34.17,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 27.06,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:23.933778+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -29285,12 +29285,12 @@
         "lat": 12.979494,
         "lng": 77.521192
       },
-      "temp": 40.91,
-      "temp_source": "seed",
+      "temp": 26.81,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 40.91,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.81,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:24.419410+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -41702,12 +41702,12 @@
         "lat": 13.05274,
         "lng": 77.510963
       },
-      "temp": 39.19,
-      "temp_source": "seed",
+      "temp": 26.56,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 39.19,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.56,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:24.890951+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -47583,12 +47583,12 @@
         "lat": 13.006168,
         "lng": 77.539242
       },
-      "temp": 43.22,
-      "temp_source": "seed",
+      "temp": 26.81,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 43.22,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.81,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:25.331562+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -49808,12 +49808,12 @@
         "lat": 13.012962,
         "lng": 77.571142
       },
-      "temp": 43.39,
-      "temp_source": "seed",
+      "temp": 26.41,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 43.39,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.41,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:25.783122+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -52505,12 +52505,12 @@
         "lat": 13.031903,
         "lng": 77.587294
       },
-      "temp": 42.59,
-      "temp_source": "seed",
+      "temp": 26.41,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 42.59,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.41,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:26.233954+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -54598,12 +54598,12 @@
         "lat": 13.010558,
         "lng": 77.609531
       },
-      "temp": 44.07,
-      "temp_source": "seed",
+      "temp": 26.41,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 44.07,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.41,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:26.704591+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -57935,12 +57935,12 @@
         "lat": 13.019304,
         "lng": 77.632506
       },
-      "temp": 42.55,
-      "temp_source": "seed",
+      "temp": 26.41,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 42.55,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.41,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:27.183123+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -62316,12 +62316,12 @@
         "lat": 12.982213,
         "lng": 77.64993
       },
-      "temp": 42.26,
-      "temp_source": "seed",
+      "temp": 26.41,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 42.26,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.41,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:27.652020+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -66461,12 +66461,12 @@
         "lat": 12.985185,
         "lng": 77.598378
       },
-      "temp": 44.76,
-      "temp_source": "seed",
+      "temp": 26.41,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 44.76,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.41,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:28.083208+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -69514,12 +69514,12 @@
         "lat": 12.954091,
         "lng": 77.626923
       },
-      "temp": 42.97,
-      "temp_source": "seed",
+      "temp": 26.41,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 42.97,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.41,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:28.545506+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -73091,12 +73091,12 @@
         "lat": 12.979955,
         "lng": 77.570185
       },
-      "temp": 45.0,
-      "temp_source": "seed",
+      "temp": 26.41,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 45.0,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.41,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:28.986428+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -75848,12 +75848,12 @@
         "lat": 12.989292,
         "lng": 77.549238
       },
-      "temp": 44.23,
-      "temp_source": "seed",
+      "temp": 26.81,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 44.23,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.81,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:29.434375+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -78161,12 +78161,12 @@
         "lat": 12.966435,
         "lng": 77.527917
       },
-      "temp": 43.12,
-      "temp_source": "seed",
+      "temp": 26.81,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 43.12,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.81,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:29.871150+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -83086,12 +83086,12 @@
         "lat": 12.956749,
         "lng": 77.539525
       },
-      "temp": 43.66,
-      "temp_source": "seed",
+      "temp": 26.81,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 43.66,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.81,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:30.306161+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -86295,12 +86295,12 @@
         "lat": 12.960925,
         "lng": 77.560313
       },
-      "temp": 44.86,
-      "temp_source": "seed",
+      "temp": 26.81,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 44.86,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.81,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:30.767466+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -88128,12 +88128,12 @@
         "lat": 12.948991,
         "lng": 77.583308
       },
-      "temp": 44.59,
-      "temp_source": "seed",
+      "temp": 26.41,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 44.59,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.41,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:31.271245+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -91205,12 +91205,12 @@
         "lat": 12.937875,
         "lng": 77.555568
       },
-      "temp": 43.96,
-      "temp_source": "seed",
+      "temp": 26.77,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 43.96,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.77,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:31.745341+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -94234,12 +94234,12 @@
         "lat": 12.920215,
         "lng": 77.56045
       },
-      "temp": 43.18,
-      "temp_source": "seed",
+      "temp": 26.77,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 43.18,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.77,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:32.225091+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -98739,12 +98739,12 @@
         "lat": 12.929744,
         "lng": 77.617937
       },
-      "temp": 42.31,
-      "temp_source": "seed",
+      "temp": 26.15,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 42.31,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.15,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:32.660980+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -101716,12 +101716,12 @@
         "lat": 12.918152,
         "lng": 77.589271
       },
-      "temp": 43.49,
-      "temp_source": "seed",
+      "temp": 26.15,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 43.49,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.15,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:33.093588+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -104189,12 +104189,12 @@
         "lat": 13.000864,
         "lng": 77.718163
       },
-      "temp": 35.93,
-      "temp_source": "seed",
+      "temp": 26.17,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 35.93,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.17,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:33.538114+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -116478,12 +116478,12 @@
         "lat": 12.895932,
         "lng": 77.621885
       },
-      "temp": 40.57,
-      "temp_source": "seed",
+      "temp": 26.15,
+      "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 40.57,
-        "observed_at": null,
-        "fetched_at": null
+        "temperature": 26.15,
+        "observed_at": "2026-04-10T18:43:00Z",
+        "fetched_at": "2026-04-10T18:43:34.026340+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -122441,5 +122441,10 @@
       "building_density": 0.38,
       "distance_to_water_km": 4.37
     }
-  ]
+  ],
+  "refresh_status": {
+    "refreshed_count": 25,
+    "failed_count": 0,
+    "failures": []
+  }
 }

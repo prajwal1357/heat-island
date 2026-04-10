@@ -2,15 +2,29 @@ import { useEffect, useState } from "react";
 import HeatGrid from "./components/HeatGrid";
 import InterventionPanel from "./components/InterventionPanel";
 import PlannerChat from "./components/PlannerChat";
-import { getGrid } from "./api";
+import { getGrid, refreshWeather } from "./api";
 
 function App() {
   const [gridData, setGridData] = useState([]);
   const [selectedZone, setSelectedZone] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    getGrid().then(res => setGridData(res.data)).catch(console.error);
+    getGrid().then(res => setGridData(res.data.zones || res.data)).catch(console.error);
   }, []);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      const res = await refreshWeather();
+      setGridData(res.data.zones || res.data);
+    } catch (e) {
+      console.error("Refresh failed:", e);
+      alert("Failed to sync with Tomorrow.io API.");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   const handlePredictionUpdate = (predictedData) => {
     setGridData(prev => prev.map(z => 
@@ -39,7 +53,14 @@ function App() {
             <p className="text-slate-400 font-medium tracking-wide text-xs uppercase">Strategic Environmental AI Interface</p>
           </div>
           
-          <div className="flex gap-4 w-full md:w-auto relative z-10">
+          <div className="flex gap-4 w-full md:w-auto relative z-10 items-center">
+               <button 
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                  className={`px-4 py-3 rounded-xl border border-teal-500/50 bg-teal-500/10 hover:bg-teal-500/20 transition-all font-bold text-xs uppercase tracking-wider text-teal-400 shadow-md ${isRefreshing ? 'opacity-50 cursor-not-allowed' : ''}`}
+               >
+                 {isRefreshing ? "Syncing API..." : "Live Sync"}
+               </button>
                <div className="flex-1 md:flex-none bg-slate-950/50 border border-slate-800/80 px-6 py-4 rounded-xl backdrop-blur-sm shadow-inner">
                   <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">City Avg Temp</div>
                   <div className="text-2xl font-mono text-white font-bold tracking-tight">{avgTemp.toFixed(1)}°C</div>
@@ -48,7 +69,7 @@ function App() {
                   <div className="absolute inset-0 bg-red-500/5 pulse-animation"></div>
                   <div className="text-[10px] text-red-400/80 font-bold uppercase tracking-widest mb-1 relative z-10">Critical Zone</div>
                   <div className="text-2xl font-mono text-white flex items-center font-bold tracking-tight relative z-10">
-                    #{hottest?.id}
+                    {hottest?.name || `#${hottest?.id}`}
                     <span className="text-sm font-bold text-red-400/90 ml-3 py-0.5 px-2 bg-red-950/50 rounded-md">
                       {hottest?.temp.toFixed(1)}°C
                     </span>
