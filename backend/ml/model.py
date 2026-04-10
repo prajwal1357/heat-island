@@ -39,8 +39,16 @@ class TempModel:
         if intervention.get("reflective_pavement"):
             updated_zone["albedo"] = min(0.4, updated_zone["albedo"] + 0.08)
             
-        X = [[updated_zone[f] for f in FEATURE_NAMES]]
-        return float(self.model.predict(X)[0])
+        current_X = [[zone[f] for f in FEATURE_NAMES]]
+        updated_X = [[updated_zone[f] for f in FEATURE_NAMES]]
+        
+        # Calculate pure physics delta_T from the ML model
+        pure_current = float(self.model.predict(current_X)[0])
+        pure_updated = float(self.model.predict(updated_X)[0])
+        delta_T = pure_current - pure_updated
+        
+        # Apply the physical delta_T to the live weather baseline
+        return float(zone["temp"] - delta_T)
 
     def rank_scenarios(self, grid: list):
         """

@@ -29,6 +29,13 @@ def generate_training_data(grid, samples=5000):
     """Generate training samples anchored to the current cached baseline."""
     training_data = []
     
+    # Calculate Global Baseline Offset
+    # This preserves the physics gradients for the ML model to learn without getting confused, 
+    # but still dynamically forces the dataset to represent the real-time Tomorrow.io extremes!
+    avg_live_temp = sum(z["temp"] for z in grid) / len(grid) if grid else 35.0
+    avg_formula_temp = sum(compute_temp(z) for z in grid) / len(grid) if grid else 35.0
+    global_offset = avg_live_temp - avg_formula_temp
+    
     # 10% of the value range for each feature as the standard deviation for jitter
     std_dev = {
         "albedo": 0.03,              # (0.4 - 0.1) * 0.1
@@ -49,9 +56,8 @@ def generate_training_data(grid, samples=5000):
             "distance_to_water_km": float(np.clip(base_zone["distance_to_water_km"] + np.random.normal(0, std_dev["distance_to_water_km"]), 0, 5)),
         }
         
-        # Preserve the live/cache baseline and apply only the relative feature impact.
-        jittered_formula_temp = compute_temp(jittered)
-        jittered["temp"] = float(base_temp + (jittered_formula_temp - base_formula_temp))
+        # Apply the physical algorithm, and dynamically anchor it to the Tomorrow.io live weather offset
+        jittered["temp"] = round(compute_temp(jittered) + global_offset, 3)
         training_data.append(jittered)
         
     df = pd.DataFrame(training_data)
