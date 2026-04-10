@@ -1,21 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { predict } from "../api";
 
-export default function InterventionPanel({ selectedZone, onPredictionUpdate }) {
+export default function InterventionPanel({ selectedZone }) {
   const [greenCoverDelta, setGreenCoverDelta] = useState(0);
   const [coolRoof, setCoolRoof] = useState(false);
   const [reflectivePavement, setReflectivePavement] = useState(false);
   const [prediction, setPrediction] = useState(null);
   
   const debounceRef = useRef(null);
-
-  // Reset sliders when an entirely new zone is clicked.
-  useEffect(() => {
-    setGreenCoverDelta(0);
-    setCoolRoof(false);
-    setReflectivePavement(false);
-    setPrediction(null);
-  }, [selectedZone?.id]);
 
   useEffect(() => {
     if (!selectedZone) return;
@@ -31,7 +23,6 @@ export default function InterventionPanel({ selectedZone, onPredictionUpdate }) 
           reflective_pavement: reflectivePavement
         });
         setPrediction(res.data);
-        onPredictionUpdate(res.data);
       } catch (e) {
         console.error("Prediction failed", e);
       }
@@ -47,7 +38,7 @@ export default function InterventionPanel({ selectedZone, onPredictionUpdate }) 
            <svg className="w-8 h-8 text-teal-900/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
            </svg>
-           <p>Select a city zone to configure interventions</p>
+           <p>Select a constituency to configure interventions</p>
         </div>
       </div>
     );
@@ -58,8 +49,11 @@ export default function InterventionPanel({ selectedZone, onPredictionUpdate }) 
 
   return (
     <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-white shadow-xl h-full flex flex-col">
-      <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-800">
-        <h3 className="text-lg font-bold text-teal-400">Zone {selectedZone.id}</h3>
+      <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-800 gap-4">
+        <div>
+          <h3 className="text-lg font-bold text-teal-400">{selectedZone.name}</h3>
+          <p className="text-xs text-slate-500 mt-1">Constituency code {selectedZone.id}</p>
+        </div>
         <span className="text-xs px-3 py-1 font-bold bg-slate-950 rounded-full text-slate-300 shadow-inner">
           Current: {selectedZone.temp.toFixed(1)}°C
         </span>

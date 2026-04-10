@@ -21,7 +21,31 @@ function getPathData(zones) {
 
   const featureCollection = getFeatureCollection(zones);
   const projection = d3.geoMercator().fitSize([VIEWBOX_WIDTH, VIEWBOX_HEIGHT], featureCollection);
-  const path = d3.geoPath(projection);
+  const line = d3.line().x((point) => point[0]).y((point) => point[1]);
+
+  const ringToPath = (ring) => {
+    const projected = ring
+      .map((coordinate) => projection(coordinate))
+      .filter(Boolean);
+
+    if (!projected.length) {
+      return "";
+    }
+
+    return `${line(projected)}Z`;
+  };
+
+  const geometryToPath = (geometry) => {
+    if (geometry.type === "Polygon") {
+      return geometry.coordinates.map(ringToPath).join(" ");
+    }
+
+    if (geometry.type === "MultiPolygon") {
+      return geometry.coordinates.flatMap((polygon) => polygon.map(ringToPath)).join(" ");
+    }
+
+    return "";
+  };
 
   return featureCollection.features.map((feature) => ({
     id: feature.properties.id,
@@ -29,8 +53,9 @@ function getPathData(zones) {
     temp: feature.properties.temp,
     weather: feature.properties.weather,
     center: feature.properties.center,
-    path: path(feature),
-    labelPoint: path.centroid(feature),
+    temp_source: feature.properties.temp_source,
+    path: geometryToPath(feature.geometry),
+    labelPoint: projection([feature.properties.center.lng, feature.properties.center.lat]),
   }));
 }
 
@@ -75,8 +100,8 @@ export default function ConstituencyMap({ zones, selectedZoneId, onSelectZone })
                 <path
                   d={zone.path}
                   fill={colorScale(zone.temp)}
-                  stroke={isSelected ? "#f8fafc" : "#0f172a"}
-                  strokeWidth={isSelected ? 2.8 : 1.1}
+                  stroke={isSelected ? "#f8fafc" : "#13233d"}
+                  strokeWidth={isSelected ? 2.6 : 1.35}
                   className="cursor-pointer transition-all duration-500 ease-out"
                   opacity={isSelected ? 1 : 0.92}
                   onClick={() => onSelectZone(zone.id)}
@@ -90,6 +115,18 @@ export default function ConstituencyMap({ zones, selectedZoneId, onSelectZone })
                   fill={isSelected ? "#f8fafc" : "#cbd5e1"}
                   className="pointer-events-none transition-all duration-300"
                 />
+                {isSelected && (
+                  <text
+                    x={labelX + 8}
+                    y={labelY - 8}
+                    fill="#f8fafc"
+                    fontSize="12"
+                    fontWeight="700"
+                    className="pointer-events-none"
+                  >
+                    {zone.name}
+                  </text>
+                )}
               </g>
             );
           })}

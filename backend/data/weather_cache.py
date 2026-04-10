@@ -234,32 +234,40 @@ def refresh_live_weather_cache() -> dict:
     for zone in zones:
         latitude = zone["center"]["lat"]
         longitude = zone["center"]["lng"]
-        response = requests.get(
-            "https://api.tomorrow.io/v4/weather/realtime",
-            params={
-                "location": f"{latitude},{longitude}",
-                "units": "metric",
-                "apikey": api_key,
-            },
-            timeout=20,
-        )
-        response.raise_for_status()
-        realtime = response.json()
-        temperature = realtime["data"]["values"]["temperature"]
-        observed_at = realtime["data"].get("time")
-        fetched_at = datetime.now(timezone.utc).isoformat()
+        try:
+            response = requests.get(
+                "https://api.tomorrow.io/v4/weather/realtime",
+                params={
+                    "location": f"{latitude},{longitude}",
+                    "units": "metric",
+                    "apikey": api_key,
+                },
+                timeout=20,
+            )
+            response.raise_for_status()
+            realtime = response.json()
+            temperature = realtime["data"]["values"]["temperature"]
+            observed_at = realtime["data"].get("time")
+            fetched_at = datetime.now(timezone.utc).isoformat()
 
-        zone["temp"] = round(float(temperature), 2)
-        zone["temp_source"] = "tomorrow.io"
-        zone["weather"] = {
-            "temperature": round(float(temperature), 2),
-            "observed_at": observed_at,
-            "fetched_at": fetched_at,
-        }
-        refreshed_count += 1
+            zone["temp"] = round(float(temperature), 2)
+            zone["temp_source"] = "tomorrow.io"
+            zone["weather"] = {
+                "temperature": round(float(temperature), 2),
+                "observed_at": observed_at,
+                "fetched_at": fetched_at,
+            }
+            zone.pop("refresh_error", None)
+            refreshed_count += 1
+        except Exception as exc:
+            zone["refresh_error"] = str(exc)
+            failures.append({"id": zone["id"], "name": zone["name"], "error": str(exc)})
+
+    if refreshed_count == 0:
+        raise RuntimeError("Tomorrow.io refresh failed for all constituencies.")
 
     payload["last_refreshed_at"] = datetime.now(timezone.utc).isoformat()
-    payload["weather_provider"] = "Tomorrow.io"
+    payload["weather_provider"] = "Tomorrow.io" if not failures else "Tomorrow.io (partial)"
     payload["refresh_status"] = {
         "refreshed_count": refreshed_count,
         "failed_count": len(failures),
