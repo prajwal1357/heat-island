@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #334155;
+    border-radius: 20px;
+    border: 3px solid #020617;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: #020617; /* slate-950 */
+}
+
+/* Base custom styles to add the pulse look to the command dashboard! */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.3; }
+}
+
+.pulse-animation {
+  animation: soft-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
