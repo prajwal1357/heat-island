@@ -1,1 +1,1 @@
-FEATURE_NAMES = ["albedo", "green_cover", "density", "water"]
+FEATURE_NAMES = ["albedo", "green_cover_pct", "building_density", "distance_to_water_km"]
