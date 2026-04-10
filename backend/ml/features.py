@@ -1,0 +1,1 @@
+FEATURE_NAMES = ["albedo", "green_cover", "density", "water"]
