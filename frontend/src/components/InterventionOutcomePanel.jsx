@@ -23,6 +23,39 @@ function getActiveInterventions({ greenCoverDelta, coolRoof, reflectivePavement 
   return interventions;
 }
 
+function buildModelReadout(prediction) {
+  if (!prediction) {
+    return { summary: "Prediction pending.", warning: null };
+  }
+
+  if (prediction.diminishing_returns && prediction.best_alternative_interventions?.length) {
+    const altStack = prediction.best_alternative_interventions.join(", ");
+    return {
+      summary: `Diminishing returns detected. The extra interventions yield minimal extra cooling vs cost.`,
+      warning: `Consider the cheaper alternative: ${altStack}.`,
+    };
+  }
+
+  if (prediction.delta_T >= 1.5) {
+    return {
+      summary: `Strong cooling response generated.`,
+      warning: null,
+    };
+  }
+
+  if (prediction.delta_T >= 0.5) {
+    return {
+      summary: `Moderate cooling impact. Assess if the current spend is fully justified.`,
+      warning: null,
+    };
+  }
+
+  return {
+    summary: `Weak cooling baseline shift.`,
+    warning: `Consider prioritizing tree cover before stacking surface treatments.`,
+  };
+}
+
 export default function InterventionOutcomePanel({ selectedZone }) {
   const [greenCoverDelta, setGreenCoverDelta] = useState(0);
   const [coolRoof, setCoolRoof] = useState(false);
@@ -72,9 +105,9 @@ export default function InterventionOutcomePanel({ selectedZone }) {
     );
   }
 
-  const cost = ((greenCoverDelta / 10) * 0.8) + (coolRoof ? 0.5 : 0) + (reflectivePavement ? 0.3 : 0);
   const activeInterventions = getActiveInterventions({ greenCoverDelta, coolRoof, reflectivePavement });
   const hasIntervention = activeInterventions.length > 0;
+  const modelReadout = buildModelReadout(prediction);
 
   return (
     <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-white shadow-xl h-full flex flex-col">
@@ -174,7 +207,7 @@ export default function InterventionOutcomePanel({ selectedZone }) {
                   </div>
                   <div className="rounded-xl bg-slate-900/80 border border-slate-800 px-3 py-3">
                     <div className="text-[10px] uppercase tracking-[0.18em] text-slate-500 font-bold">Estimated Cost</div>
-                    <div className="text-lg font-semibold text-amber-300 mt-1">{formatCurrency(cost)}</div>
+                    <div className="text-lg font-semibold text-amber-300 mt-1">{formatCurrency(prediction.estimated_cost_crore)}</div>
                   </div>
                 </div>
               </div>
@@ -182,8 +215,8 @@ export default function InterventionOutcomePanel({ selectedZone }) {
               <div className="rounded-xl border border-slate-800/80 bg-slate-950/70 p-4 flex flex-col">
                 <div className="text-[10px] uppercase tracking-[0.22em] text-slate-500 font-bold mb-3">Intervention Stack</div>
                 <div className="flex flex-wrap gap-2">
-                  {activeInterventions.length ? (
-                    activeInterventions.map((item) => (
+                  {prediction.active_interventions.length ? (
+                    prediction.active_interventions.map((item) => (
                       <span
                         key={item}
                         className="px-3 py-1.5 rounded-full bg-teal-500/12 text-teal-200 text-xs font-bold border border-teal-500/15"
@@ -196,14 +229,24 @@ export default function InterventionOutcomePanel({ selectedZone }) {
                   )}
                 </div>
 
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-xl bg-slate-900/80 border border-slate-800 px-3 py-3">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-slate-500 font-bold">Stack Size</div>
+                    <div className="text-lg font-semibold text-slate-100 mt-1">{prediction.intervention_count} change{prediction.intervention_count === 1 ? "" : "s"}</div>
+                  </div>
+                  <div className="rounded-xl bg-slate-900/80 border border-slate-800 px-3 py-3">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-slate-500 font-bold">Cooling / Crore</div>
+                    <div className="text-lg font-semibold text-teal-300 mt-1">{prediction.cooling_per_crore.toFixed(2)}</div>
+                  </div>
+                </div>
+
                 <div className="mt-auto pt-4">
-                  <div className="rounded-xl border border-slate-800 bg-slate-900/80 px-3 py-3">
+                  <div className={`rounded-xl border ${modelReadout.warning ? 'border-amber-500/30 bg-amber-500/10' : 'border-slate-800 bg-slate-900/80'} px-3 py-3 transition-colors duration-300`}>
                     <div className="text-[10px] uppercase tracking-[0.18em] text-slate-500 font-bold">Model Readout</div>
-                    <p className="text-sm text-slate-300 mt-2 leading-relaxed">
-                      {prediction.delta_T > 0
-                        ? "This mix is expected to reduce the local heat baseline and improve outdoor comfort in the selected constituency."
-                        : "This combination does not currently produce a meaningful modeled drop, so try increasing tree cover or stacking surface upgrades."}
-                    </p>
+                    <p className="text-sm text-slate-200 mt-2 leading-relaxed">{modelReadout.summary}</p>
+                    {modelReadout.warning && (
+                      <p className="text-[13px] text-amber-300 mt-2 font-medium">⚠️ {modelReadout.warning}</p>
+                    )}
                   </div>
                 </div>
               </div>

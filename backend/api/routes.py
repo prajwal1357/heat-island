@@ -10,6 +10,12 @@ from planner.planner_engine import build_system_prompt, build_user_prompt, gener
 router = APIRouter()
 
 
+def _clean_zero(value: float | None) -> float | None:
+    if value is None:
+        return None
+    return 0.0 if abs(value) < 0.005 else round(value, 2)
+
+
 def _calculate_cost(green_cover_delta: float, cool_roof: bool, reflective_pavement: bool) -> float:
     cost = (green_cover_delta / 10.0) * 0.8
     if cool_roof:
@@ -48,27 +54,27 @@ def _strict_subset_variants(payload: PredictRequest) -> list[dict]:
     pavement_values = [False, payload.reflective_pavement] if payload.reflective_pavement else [False]
 
     for tree_delta in tree_values:
-      for cool_roof in cool_values:
-        for reflective_pavement in pavement_values:
-            if (
-                tree_delta == payload.green_cover_delta
-                and cool_roof == payload.cool_roof
-                and reflective_pavement == payload.reflective_pavement
-            ):
-                continue
+        for cool_roof in cool_values:
+            for reflective_pavement in pavement_values:
+                if (
+                    tree_delta == payload.green_cover_delta
+                    and cool_roof == payload.cool_roof
+                    and reflective_pavement == payload.reflective_pavement
+                ):
+                    continue
 
-            if (
-                tree_delta <= payload.green_cover_delta
-                and (not cool_roof or payload.cool_roof)
-                and (not reflective_pavement or payload.reflective_pavement)
-            ):
-                variants.append(
-                    {
-                        "green_cover_delta": float(tree_delta),
-                        "cool_roof": cool_roof,
-                        "reflective_pavement": reflective_pavement,
-                    }
-                )
+                if (
+                    tree_delta <= payload.green_cover_delta
+                    and (not cool_roof or payload.cool_roof)
+                    and (not reflective_pavement or payload.reflective_pavement)
+                ):
+                    variants.append(
+                        {
+                            "green_cover_delta": float(tree_delta),
+                            "cool_roof": cool_roof,
+                            "reflective_pavement": reflective_pavement,
+                        }
+                    )
 
     unique_variants = []
     seen = set()
@@ -97,7 +103,7 @@ def _analyze_prediction(model: TempModel, zone: dict, payload: PredictRequest, p
         payload.cool_roof,
         payload.reflective_pavement,
     )
-    cooling_per_crore = round(delta_t / estimated_cost, 2) if estimated_cost > 0 else 0.0
+    cooling_per_crore = _clean_zero(delta_t / estimated_cost) if estimated_cost > 0 else 0.0
 
     best_alternative = None
     for variant in _strict_subset_variants(payload):
@@ -113,13 +119,13 @@ def _analyze_prediction(model: TempModel, zone: dict, payload: PredictRequest, p
             variant["cool_roof"],
             variant["reflective_pavement"],
         )
-        alt_score = (round(alt_delta_t, 2), -alt_cost)
+        alt_score = (_clean_zero(alt_delta_t), -alt_cost)
 
         if best_alternative is None or alt_score > best_alternative["score"]:
             best_alternative = {
                 "score": alt_score,
-                "delta_t": round(alt_delta_t, 2),
-                "predicted_temp": round(alt_predicted_temp, 2),
+                "delta_t": _clean_zero(alt_delta_t),
+                "predicted_temp": _clean_zero(alt_predicted_temp),
                 "cost": alt_cost,
                 "interventions": alt_active,
             }
@@ -130,9 +136,9 @@ def _analyze_prediction(model: TempModel, zone: dict, payload: PredictRequest, p
     diminishing_returns = False
 
     if best_alternative and estimated_cost > best_alternative["cost"]:
-        marginal_gain_delta_t = round(delta_t - best_alternative["delta_t"], 2)
-        marginal_gain_cost = round(estimated_cost - best_alternative["cost"], 2)
-        marginal_gain_per_crore = round(marginal_gain_delta_t / marginal_gain_cost, 2) if marginal_gain_cost > 0 else 0.0
+        marginal_gain_delta_t = _clean_zero(delta_t - best_alternative["delta_t"])
+        marginal_gain_cost = _clean_zero(estimated_cost - best_alternative["cost"])
+        marginal_gain_per_crore = _clean_zero(marginal_gain_delta_t / marginal_gain_cost) if marginal_gain_cost > 0 else 0.0
         diminishing_returns = (
             len(active) > len(best_alternative["interventions"])
             and marginal_gain_delta_t <= 0.35

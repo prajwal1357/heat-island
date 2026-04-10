@@ -41,17 +41,12 @@ def build_user_prompt(grid, ranked_scenarios_df: pd.DataFrame, budget_crore: flo
     # Combine everything so the LLM has roughly 50 highly curated rows spanning the entire city map.
     best_options = pd.concat([max_cooling_per_zone, efficient_per_zone]).drop_duplicates(subset=["zone_id", "interventions"])
     
-    # Map the real names of the Bangalore constituencies into the ML context window!
-    id_to_name = {z["id"]: z["name"] for z in grid}
-    
     scenarios_text = "Here are the top simulated interventions for the city. I have provided both the 'Most Efficient' and the 'Maximum Cooling' options across various zones to provide comparative ML data:\n\n"
-    scenarios_text += "| ID | Constituency | Current Temp | Interventions | Cost | Predicted | Cooling | Efficiency |\n"
-    scenarios_text += "|----|--------------|--------------|---------------|------|-----------|---------|------------|\n"
+    scenarios_text += "| Zone ID | Current Temp | Interventions | Cost (₹Cr) | Predicted Temp | Cooling (δT) | Efficiency (δT/₹Cr) |\n"
+    scenarios_text += "|---------|--------------|---------------|------------|----------------|--------------|---------------------|\n"
     
     for _, row in best_options.iterrows():
-        zid = int(row['zone_id'])
-        zname = id_to_name.get(zid, "Unknown Zone")
-        scenarios_text += f"| {zid} | {zname} | {row['current_temp']}°C | {row['interventions']} | ₹{row['cost_crore']} | {row['predicted_temp']}°C | -{row['delta_T']}°C | {round(row['efficiency'], 2)} |\n"
+        scenarios_text += f"| {int(row['zone_id'])} | {row['current_temp']}°C | {row['interventions']} | ₹{row['cost_crore']} | {row['predicted_temp']}°C | -{row['delta_T']}°C | {round(row['efficiency'], 2)} |\n"
         
     scenarios_text += f"\nUsing ONLY the ML permutations provided above, allocate your ₹{budget_crore}Cr budget wisely to achieve the maximum cooling effect. Compare the efficiency ratios to identify points of diminishing returns (where spending drastically more barely increases the delta_T drop). Formulate your argument purely in the required JSON."
     return scenarios_text
