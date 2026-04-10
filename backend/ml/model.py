@@ -39,8 +39,8 @@ class TempModel:
         if intervention.get("reflective_pavement"):
             updated_zone["albedo"] = min(0.4, updated_zone["albedo"] + 0.08)
             
-        current_X = [[zone[f] for f in FEATURE_NAMES]]
-        updated_X = [[updated_zone[f] for f in FEATURE_NAMES]]
+        current_X = pd.DataFrame([{feature_name: zone[feature_name] for feature_name in FEATURE_NAMES}])
+        updated_X = pd.DataFrame([{feature_name: updated_zone[feature_name] for feature_name in FEATURE_NAMES}])
         
         # Calculate pure physics delta_T from the ML model
         pure_current = float(self.model.predict(current_X)[0])

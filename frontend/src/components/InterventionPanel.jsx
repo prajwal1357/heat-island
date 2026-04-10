@@ -38,21 +38,6 @@ export default function InterventionPanel({ selectedZone }) {
            <svg className="w-8 h-8 text-teal-900/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
            </svg>
-      } catch (e) {
-        console.error("Prediction failed", e);
-      }
-    }, 300); // UI performance debounce so ML layer doesn't crash on slider drag!
-
-    return () => clearTimeout(debounceRef.current);
-  }, [greenCoverDelta, coolRoof, reflectivePavement, selectedZone]);
-
-  if (!selectedZone) {
-    return (
-      <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center justify-center h-full text-slate-500 shadow-xl font-medium text-sm">
-        <div className="flex flex-col items-center gap-2">
-           <svg className="w-8 h-8 text-teal-900/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
-           </svg>
            <p>Select a constituency to configure interventions</p>
         </div>
       </div>

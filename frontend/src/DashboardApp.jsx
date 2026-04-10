@@ -1,7 +1,7 @@
 import { startTransition, useEffect, useState } from "react";
 import ConstituencyMap from "./components/ConstituencyMap";
 import InterventionOutcomePanel from "./components/InterventionOutcomePanel";
-import PlannerChat from "./components/PlannerChat";
+import PlannerPanel from "./components/PlannerPanel";
 import { getGrid, refreshWeather } from "./api";
 
 function formatSyncTime(timestamp) {
@@ -166,7 +166,7 @@ export default function DashboardApp() {
           </div>
 
           <div className="xl:col-span-7 flex flex-col min-h-[500px]">
-            <PlannerChat />
+            <PlannerPanel />
           </div>
         </main>
       </div>
