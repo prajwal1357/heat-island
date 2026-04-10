@@ -9,20 +9,20 @@ from ml.model import TempModel
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # --- Startup ---
-    print("🌍 Initializing City Grid Data Layer...")
+    print("Initializing City Grid Data Layer...")
     app.state.grid = generate_grid()
     
-    print("🧠 Loading ML Prediction Layer...")
+    print("Loading ML Prediction Layer...")
     model = TempModel()
     
     # If the model.joblib exists, it loads instantly.
     # Otherwise, it automatically generates synthetic data & trains right now.
     if not model.load():
-        print("⚠️ Model not found on disk. Training a new model now (this takes ~3s)...")
+        print("Model not found on disk. Training a new model now (this takes ~3s)...")
         training_df = generate_training_data(app.state.grid, samples=5000)
         model.train(training_df)
     else:
-        print("✅ ML Model successfully loaded from disk!")
+        print("ML Model successfully loaded from disk!")
         
     app.state.model = model
     
