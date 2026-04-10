@@ -6,13 +6,19 @@ Your explicit priorities are:
 2. Prioritize residential equity
 3. Prioritize industrial zones
 
-You MUST respond in exactly the following format:
-
-Priority Plan:
-- Zone [ID] → [Intervention] → ₹[Cost]Cr → -[delta_T]°C → Reason: [Paragraph reasoning]
-
-Summary:
-[Explain your overall strategy, total budget spent, and average cooling achieved]
+You MUST respond strictly in valid JSON format with no markdown wrappers. Use exactly this schema:
+{{
+  "plan": [
+    {{
+      "zone_id": 12,
+      "intervention": "Action Name",
+      "cost_crore": 1.5,
+      "cooling_delta_t": 1.2,
+      "reasoning": "Reasoning text"
+    }}
+  ],
+  "summary": "Overall strategy explanation"
+}}
 """
 
 def build_user_prompt(ranked_scenarios_df):
@@ -29,5 +35,5 @@ def build_user_prompt(ranked_scenarios_df):
     for _, row in top_8.iterrows():
         scenarios_text += f"| {int(row['zone_id'])} | {row['current_temp']}°C | {row['interventions']} | ₹{row['cost_crore']} | {row['predicted_temp']}°C | {row['delta_T']}°C |\n"
         
-    scenarios_text += "\nUsing ONLY the options above, allocate the budget wisely to achieve the maximum cooling effect and rationalize your choices."
+    scenarios_text += "\nUsing ONLY the options above, allocate the budget wisely to achieve the maximum cooling effect and rationalize your choices. Output ONLY valid JSON."
     return scenarios_text

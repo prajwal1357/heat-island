@@ -9,7 +9,8 @@ def stream_llm(prompt: str, system_prompt: str):
             "model": "mistral",
             "system": system_prompt,
             "prompt": prompt,
-            "stream": True # Enable streaming
+            "stream": True,
+            "format": "json"
         },
         stream=True
     )
