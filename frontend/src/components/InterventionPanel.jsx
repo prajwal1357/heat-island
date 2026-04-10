@@ -38,6 +38,21 @@ export default function InterventionPanel({ selectedZone }) {
            <svg className="w-8 h-8 text-teal-900/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
            </svg>
+      } catch (e) {
+        console.error("Prediction failed", e);
+      }
+    }, 300); // UI performance debounce so ML layer doesn't crash on slider drag!
+
+    return () => clearTimeout(debounceRef.current);
+  }, [greenCoverDelta, coolRoof, reflectivePavement, selectedZone]);
+
+  if (!selectedZone) {
+    return (
+      <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center justify-center h-full text-slate-500 shadow-xl font-medium text-sm">
+        <div className="flex flex-col items-center gap-2">
+           <svg className="w-8 h-8 text-teal-900/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+           </svg>
            <p>Select a constituency to configure interventions</p>
         </div>
       </div>
@@ -46,6 +61,15 @@ export default function InterventionPanel({ selectedZone }) {
 
   // Frontend quick-calc to immediately render costs avoiding extra API load
   const cost = ((greenCoverDelta / 10) * 0.8) + (coolRoof ? 0.5 : 0) + (reflectivePavement ? 0.3 : 0);
+  const efficiency = prediction?.delta_T > 0 && cost > 0 ? (prediction.delta_T / cost) : 0;
+
+  const getEfficiencyState = () => {
+     if (cost === 0) return { text: "Adjust sliders to initiate simulations", color: "text-slate-500", bg: "bg-slate-900" };
+     if (efficiency < 0.6) return { text: "⚠️ Diminishing Returns: Overspending for minimal cooling", color: "text-red-400", bg: "bg-red-500/10 border-red-500/20" };
+     if (efficiency < 1.0) return { text: "Moderate Efficiency", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" };
+     return { text: "✨ Highly Efficient cooling ratio", color: "text-teal-400", bg: "bg-teal-500/10 border-teal-500/20" };
+  }
+  const effState = getEfficiencyState();
 
   return (
     <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-white shadow-xl h-full flex flex-col">
@@ -101,7 +125,7 @@ export default function InterventionPanel({ selectedZone }) {
 
       {prediction && (
         <div className="mt-6 pt-5 border-t border-slate-800">
-          <div className="flex justify-between items-end">
+          <div className="flex justify-between items-end mb-4">
             <div>
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1.5">Predicted Outcome</p>
               <div className="text-3xl font-bold font-mono tracking-tight text-white flex items-center">
@@ -118,6 +142,16 @@ export default function InterventionPanel({ selectedZone }) {
                 <span className="text-xs ml-1 font-bold text-amber-500/60">Cr</span>
               </div>
             </div>
+          </div>
+          
+          {/* Diminishing Returns ML Output Box */}
+          <div className={`p-3 border rounded-xl flex items-center justify-between transition-colors duration-300 ${effState.bg}`}>
+             <span className={`text-xs font-bold ${effState.color}`}>{effState.text}</span>
+             {cost > 0 && (
+                <span className="font-mono text-xs font-bold text-slate-400">
+                   {efficiency.toFixed(2)} δT/₹Cr
+                </span>
+             )}
           </div>
         </div>
       )}
