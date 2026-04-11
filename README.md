@@ -12,6 +12,7 @@ Built with a **FastAPI backend** and a **React/D3.js frontend**, this platform a
 * **Physics-Bound Machine Learning:** Evaluates environmental baseline changes using a `Random Forest` delta-T engine. Real structural cooling, zero AI hallucinations.
 * **Cost Efficiency Tracking:** Prevents budgetary waste by calculating Diminishing Returns and actively alerting planners when cheaper alternatives exist.
 * **Generative City AI:** Powered by an Ollama-hosted LLM (Mistral). The backend curates 50 mathematically optimal permutations across the spatial layout and allows the LLM to output a finalized, perfectly budgeted, city-wide strategy!
+* **Chat UI:** Ask questions about the plan and get answers from the AI. this reasoning is done by the LLM with the help of the backend which gives the LLM the context of the plan.
 
 ## 💻 Tech Stack
 
