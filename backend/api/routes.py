@@ -1,11 +1,11 @@
 import requests
 
 from fastapi import APIRouter, Request, HTTPException
-from api.schemas import PredictRequest, PredictResponse, AskPlannerRequest, PlannerResponse
+from api.schemas import PredictRequest, PredictResponse, AskPlannerRequest, PlannerResponse, PlanQuestionRequest, PlanQuestionResponse
 from data.generator import generate_training_data
 from data.weather_cache import read_live_weather_cache, refresh_live_weather_cache
 from ml.model import TempModel
-from planner.planner_engine import build_system_prompt, build_user_prompt, generate_plan
+from planner.planner_engine import build_system_prompt, build_user_prompt, generate_plan, answer_plan_question
 
 router = APIRouter()
 
@@ -248,7 +248,7 @@ async def ask_planner(payload: AskPlannerRequest, request: Request):
     
     scenarios_df = model.rank_scenarios(grid)
     system_prompt = build_system_prompt(payload.budget_crore)
-    user_prompt = build_user_prompt(grid, scenarios_df, payload.budget_crore)
+    user_prompt = build_user_prompt(grid, scenarios_df, payload.budget_crore, payload.user_request)
 
     try:
         return generate_plan(user_prompt, system_prompt)
@@ -259,3 +259,11 @@ async def ask_planner(payload: AskPlannerRequest, request: Request):
         raise HTTPException(status_code=502, detail=f"Planner model returned invalid JSON: {exc}") from exc
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Planner generation failed: {exc}") from exc
+
+@router.post("/chat-plan-question", response_model=PlanQuestionResponse)
+async def chat_plan_question(payload: PlanQuestionRequest):
+    try:
+        answer = answer_plan_question(payload.plan_context, payload.question)
+        return PlanQuestionResponse(answer=answer)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"QA failed: {exc}") from exc

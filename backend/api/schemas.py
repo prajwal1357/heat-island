@@ -27,6 +27,7 @@ class PredictResponse(BaseModel):
 
 class AskPlannerRequest(BaseModel):
     budget_crore: float = 50.0
+    user_request: Optional[str] = None
 
 class PlannerPlanItem(BaseModel):
     zone_id: int
@@ -43,3 +44,10 @@ class PlannerResponse(BaseModel):
 class ZoneUpdate(BaseModel):
     zoneId: int
     changes: dict
+
+class PlanQuestionRequest(BaseModel):
+    plan_context: str
+    question: str
+
+class PlanQuestionResponse(BaseModel):
+    answer: str

@@ -23,7 +23,7 @@ You MUST respond strictly in valid JSON format with no markdown wrappers. Use ex
 }}
 """
 
-def build_user_prompt(grid, ranked_scenarios_df: pd.DataFrame, budget_crore: float):
+def build_user_prompt(grid, ranked_scenarios_df: pd.DataFrame, budget_crore: float, user_request: str = None):
     """
     Takes both the absolute highest cooling permutations and the highest efficiency permutations,
     giving the LLM the comparative data it needs to identify diminishing ML returns.
@@ -49,4 +49,8 @@ def build_user_prompt(grid, ranked_scenarios_df: pd.DataFrame, budget_crore: flo
         scenarios_text += f"| {int(row['zone_id'])} | {row['current_temp']}°C | {row['interventions']} | ₹{row['cost_crore']} | {row['predicted_temp']}°C | -{row['delta_T']}°C | {round(row['efficiency'], 2)} |\n"
         
     scenarios_text += f"\nUsing ONLY the ML permutations provided above, allocate your ₹{budget_crore}Cr budget wisely to achieve the maximum cooling effect. Compare the efficiency ratios to identify points of diminishing returns (where spending drastically more barely increases the delta_T drop). Formulate your argument purely in the required JSON."
+    
+    if user_request:
+        scenarios_text += f"\n\nCRITICAL USER INSTRUCTION: The user has requested the following modification to the plan: '{user_request}'. You MUST strictly adhere to this new constraint/focus area while drafting the budget and mention how you adapted to it directly in your JSON reasoning or summary."
+        
     return scenarios_text

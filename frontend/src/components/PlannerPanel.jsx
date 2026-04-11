@@ -11,6 +11,9 @@ export default function PlannerPanel() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [planData, setPlanData] = useState(null);
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
+  const [isAskingQuestion, setIsAskingQuestion] = useState(false);
 
   const totalCost = useMemo(() => {
     if (!planData?.plan?.length) {
@@ -29,6 +32,7 @@ export default function PlannerPanel() {
   const generatePlan = async () => {
     setIsLoading(true);
     setError("");
+    setChatMessages([]);
 
     try {
       const response = await fetch(`${BASE_URL}/ask-planner`, {
@@ -49,6 +53,38 @@ export default function PlannerPanel() {
       setPlanData(null);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const askQuestion = async () => {
+    if (!chatInput.trim() || !planData) return;
+
+    const question = chatInput.trim();
+    setChatInput("");
+    setChatMessages((prev) => [...prev, { role: "user", text: question }]);
+    setIsAskingQuestion(true);
+
+    try {
+      const response = await fetch(`${BASE_URL}/chat-plan-question`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plan_context: JSON.stringify(planData),
+          question: question,
+        }),
+      });
+
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload?.detail || "Question failed.");
+      }
+
+      setChatMessages((prev) => [...prev, { role: "ai", text: payload.answer }]);
+    } catch (e) {
+      console.error(e);
+      setChatMessages((prev) => [...prev, { role: "error", text: "Answer generation failed." }]);
+    } finally {
+      setIsAskingQuestion(false);
     }
   };
 
@@ -82,7 +118,7 @@ export default function PlannerPanel() {
           </div>
 
           <button
-            onClick={generatePlan}
+            onClick={() => generatePlan(false)}
             disabled={isLoading}
             className={`px-5 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg transition-all flex items-center gap-2 ${
               isLoading
@@ -185,9 +221,50 @@ export default function PlannerPanel() {
                 </p>
               </div>
             )}
+            
+            {/* Chat Messages Feed */}
+            {chatMessages.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-slate-800 flex flex-col gap-3">
+                 <h3 className="text-slate-500 font-bold uppercase tracking-wider text-[10px] mb-1">Q&A History</h3>
+                 {chatMessages.map((msg, idx) => (
+                   <div key={idx} className={`p-3 rounded-xl text-sm ${msg.role === 'user' ? 'bg-slate-800 text-slate-200 ml-8' : msg.role === 'error' ? 'bg-red-900/30 text-red-300' : 'bg-teal-900/20 border border-teal-500/20 text-teal-100 mr-8'}`}>
+                     {msg.text}
+                   </div>
+                 ))}
+                 {isAskingQuestion && (
+                   <div className="p-3 rounded-xl text-sm bg-teal-900/20 border border-teal-500/20 text-teal-400/70 mr-8 animate-pulse">
+                     Analyzing plan logic...
+                   </div>
+                 )}
+              </div>
+            )}
           </>
         )}
       </div>
+
+      {/* NEW: Q&A Chat Input Box */}
+      {planData?.plan?.length > 0 && !isLoading && !error && (
+        <div className="p-4 border-t border-slate-800 bg-slate-950 rounded-b-2xl flex gap-3 items-center">
+            <input 
+              type="text" 
+              placeholder="Ask a question about this plan (e.g. Why prioritize zone 2?)"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && chatInput.trim() && askQuestion()}
+              className="flex-1 bg-slate-900 border border-slate-800 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-teal-500/50 transition-colors placeholder:text-slate-600 shadow-inner"
+            />
+            <button 
+              disabled={!chatInput.trim() || isAskingQuestion}
+              onClick={askQuestion}
+              className="px-4 py-2.5 bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold text-sm rounded-xl hover:bg-teal-500/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+            >
+              Ask
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+        </div>
+      )}
     </div>
   );
 }

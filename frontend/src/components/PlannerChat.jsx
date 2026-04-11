@@ -7,6 +7,7 @@ export default function PlannerChat() {
   const [rawResponse, setRawResponse] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [finalData, setFinalData] = useState(null);
+  const [chatInput, setChatInput] = useState("");
   
   const bottomRef = useRef(null);
 
@@ -15,7 +16,7 @@ export default function PlannerChat() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [rawResponse]);
 
-  const generatePlan = async () => {
+  const generatePlan = async (isChat = false) => {
     setIsStreaming(true);
     setRawResponse(""); 
     setFinalData(null); 
@@ -23,10 +24,15 @@ export default function PlannerChat() {
     let accumulatedText = "";
 
     try {
+      const payload = { budget_crore: parseFloat(budget) };
+      if (isChat && chatInput.trim()) {
+         payload.user_request = chatInput.trim();
+      }
+
       const res = await fetch(`${BASE_URL}/ask-planner`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ budget_crore: parseFloat(budget) })
+        body: JSON.stringify(payload)
       });
 
       if (!res.body) throw new Error("No response body");
@@ -155,7 +161,7 @@ export default function PlannerChat() {
 
         {/* Real-Time Summary Block attached to bottom of UI generation */}
         {(summaryText || finalData?.summary) && (
-           <div className="mt-6 pt-4 border-t border-slate-800 animate-fade-in">
+           <div className="mt-6 pt-4 border-t border-slate-800 animate-fade-in relative pb-4">
               <h3 className="text-teal-500 font-bold uppercase tracking-wider text-xs mb-2">Strategic Summary</h3>
               <p className="text-slate-300 font-medium text-sm leading-relaxed whitespace-pre-wrap">
                  {finalData ? finalData.summary : summaryText}
@@ -166,6 +172,30 @@ export default function PlannerChat() {
 
         <div ref={bottomRef} />
       </div>
+
+      {/* NEW: Chat Input Box for follow-up refinement! */}
+      {(extractedCards.length > 0 || finalData) && !isStreaming && (
+        <div className="p-4 border-t border-slate-800 bg-slate-950 rounded-b-2xl flex gap-3 items-center">
+            <input 
+              type="text" 
+              placeholder="Refine plan... E.g. Also prioritize tree coverage in zone 5"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && chatInput.trim() && generatePlan(true)}
+              className="flex-1 bg-slate-900 border border-slate-800 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-teal-500/50 transition-colors placeholder:text-slate-600 shadow-inner"
+            />
+            <button 
+              disabled={!chatInput.trim()}
+              onClick={() => generatePlan(true)}
+              className="px-4 py-2.5 bg-teal-500/10 border border-teal-500/20 text-teal-400 font-bold text-sm rounded-xl hover:bg-teal-500/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+            >
+              Update AI
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+        </div>
+      )}
     </div>
   );
 }

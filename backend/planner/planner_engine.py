@@ -44,7 +44,7 @@ Rules:
 """
 
 
-def build_user_prompt(grid: list[dict], ranked_scenarios_df: pd.DataFrame, budget_crore: float) -> str:
+def build_user_prompt(grid: list[dict], ranked_scenarios_df: pd.DataFrame, budget_crore: float, user_request: str = None) -> str:
     zone_lookup = {zone["id"]: zone["name"] for zone in grid}
     scenarios_df = ranked_scenarios_df.copy()
     scenarios_df["efficiency"] = scenarios_df["delta_T"] / scenarios_df["cost_crore"].clip(lower=0.1)
@@ -96,11 +96,16 @@ def build_user_prompt(grid: list[dict], ranked_scenarios_df: pd.DataFrame, budge
             }
         )
 
-    return (
+    prompt = (
         "Planner input JSON:\n"
         f"{json.dumps(context, indent=2)}\n\n"
         "Construct the final plan using only these candidates."
     )
+    
+    if user_request:
+        prompt += f"\n\nCRITICAL USER CONSTRAINT: The user specifically requested: '{user_request}'. You MUST strictly adhere to this instruction when finalizing the plan, and mention how you adapted to it in the summary."
+
+    return prompt
 
 
 def _extract_json_payload(text: str) -> dict[str, Any]:
@@ -133,3 +138,22 @@ def generate_plan(prompt: str, system_prompt: str) -> dict[str, Any]:
     payload = response.json()
     raw_text = payload.get("response", "")
     return _extract_json_payload(raw_text)
+
+def answer_plan_question(plan_context: str, question: str) -> str:
+    system_prompt = "You are a senior urban planner. Answer the user's question concisely and accurately based STRICTLY on the plan context provided. Do not use JSON. Answer in plain human-readable text."
+    user_prompt = f"Here is the finalized UHI budget plan:\n{plan_context}\n\nUser Question: {question}\n\nProvide a direct, conversational answer detailing the reasoning from the plan."
+    
+    response = requests.post(
+        OLLAMA_URL,
+        json={
+            "model": OLLAMA_MODEL,
+            "system": system_prompt,
+            "prompt": user_prompt,
+            "stream": False,
+        },
+        timeout=120,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    return payload.get("response", "Could not generate an answer.")
+
