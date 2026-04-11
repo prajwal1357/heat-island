@@ -3,7 +3,7 @@
   "zone_count": 25,
   "selection_note": "Excluded Yelahanka, Bangalore South, and Anekal to keep 25 core constituencies.",
   "source_geojson": "28add4af-0ee5-4f13-9c64-0e5b3927c321.geojson",
-  "last_refreshed_at": "2026-04-10T20:10:18.146199+00:00",
+  "last_refreshed_at": "2026-04-11T02:28:09.546741+00:00",
   "weather_provider": "Tomorrow.io",
   "zones": [
     {
@@ -16,12 +16,12 @@
         "lat": 13.01401,
         "lng": 77.676087
       },
-      "temp": 24.64,
+      "temp": 24.25,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.64,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:07.239913+00:00"
+        "temperature": 24.25,
+        "observed_at": "2026-04-11T02:27:00Z",
+        "fetched_at": "2026-04-11T02:27:59.044624+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -8037,12 +8037,12 @@
         "lat": 13.128927,
         "lng": 77.641079
       },
-      "temp": 24.53,
+      "temp": 24.21,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.53,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:07.671685+00:00"
+        "temperature": 24.21,
+        "observed_at": "2026-04-11T02:27:00Z",
+        "fetched_at": "2026-04-11T02:27:59.501240+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -16588,12 +16588,12 @@
         "lat": 12.890856,
         "lng": 77.450583
       },
-      "temp": 26.24,
+      "temp": 24.88,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 26.24,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:08.104761+00:00"
+        "temperature": 24.88,
+        "observed_at": "2026-04-11T02:27:00Z",
+        "fetched_at": "2026-04-11T02:27:59.930086+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -29285,12 +29285,12 @@
         "lat": 12.979494,
         "lng": 77.521192
       },
-      "temp": 25.66,
+      "temp": 24.4,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.66,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:08.508572+00:00"
+        "temperature": 24.4,
+        "observed_at": "2026-04-11T02:27:00Z",
+        "fetched_at": "2026-04-11T02:28:00.367743+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -41702,12 +41702,12 @@
         "lat": 13.05274,
         "lng": 77.510963
       },
-      "temp": 24.44,
+      "temp": 24.3,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.44,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:08.948842+00:00"
+        "temperature": 24.3,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:00.833057+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -47583,12 +47583,12 @@
         "lat": 13.006168,
         "lng": 77.539242
       },
-      "temp": 25.66,
+      "temp": 24.4,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.66,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:09.390455+00:00"
+        "temperature": 24.4,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:01.273224+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -49808,12 +49808,12 @@
         "lat": 13.012962,
         "lng": 77.571142
       },
-      "temp": 24.97,
+      "temp": 24.23,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.97,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:09.821744+00:00"
+        "temperature": 24.23,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:01.701292+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -52505,12 +52505,12 @@
         "lat": 13.031903,
         "lng": 77.587294
       },
-      "temp": 24.97,
+      "temp": 24.23,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.97,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:10.362050+00:00"
+        "temperature": 24.23,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:02.136120+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -54598,12 +54598,12 @@
         "lat": 13.010558,
         "lng": 77.609531
       },
-      "temp": 24.97,
+      "temp": 24.23,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.97,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:10.767859+00:00"
+        "temperature": 24.23,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:02.567241+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -57935,12 +57935,12 @@
         "lat": 13.019304,
         "lng": 77.632506
       },
-      "temp": 24.97,
+      "temp": 24.23,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.97,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:11.216280+00:00"
+        "temperature": 24.23,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:02.993985+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -62316,12 +62316,12 @@
         "lat": 12.982213,
         "lng": 77.64993
       },
-      "temp": 24.97,
+      "temp": 24.23,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.97,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:11.652810+00:00"
+        "temperature": 24.23,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:03.428328+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -66461,12 +66461,12 @@
         "lat": 12.985185,
         "lng": 77.598378
       },
-      "temp": 24.97,
+      "temp": 24.23,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.97,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:12.141776+00:00"
+        "temperature": 24.23,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:03.865700+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -69514,12 +69514,12 @@
         "lat": 12.954091,
         "lng": 77.626923
       },
-      "temp": 24.97,
+      "temp": 24.23,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.97,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:12.590384+00:00"
+        "temperature": 24.23,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:04.318604+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -73091,12 +73091,12 @@
         "lat": 12.979955,
         "lng": 77.570185
       },
-      "temp": 24.97,
+      "temp": 24.23,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.97,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:13.035488+00:00"
+        "temperature": 24.23,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:04.769350+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -75848,12 +75848,12 @@
         "lat": 12.989292,
         "lng": 77.549238
       },
-      "temp": 25.66,
+      "temp": 24.4,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.66,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:13.530525+00:00"
+        "temperature": 24.4,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:05.194382+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -78161,12 +78161,12 @@
         "lat": 12.966435,
         "lng": 77.527917
       },
-      "temp": 25.66,
+      "temp": 24.4,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.66,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:14.288580+00:00"
+        "temperature": 24.4,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:05.650822+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -83086,12 +83086,12 @@
         "lat": 12.956749,
         "lng": 77.539525
       },
-      "temp": 25.66,
+      "temp": 24.4,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.66,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:14.704499+00:00"
+        "temperature": 24.4,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:06.069309+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -86295,12 +86295,12 @@
         "lat": 12.960925,
         "lng": 77.560313
       },
-      "temp": 25.66,
+      "temp": 24.4,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.66,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:15.125295+00:00"
+        "temperature": 24.4,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:06.491722+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -88128,12 +88128,12 @@
         "lat": 12.948991,
         "lng": 77.583308
       },
-      "temp": 24.97,
+      "temp": 24.23,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.97,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:15.544084+00:00"
+        "temperature": 24.23,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:06.943941+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -91205,12 +91205,12 @@
         "lat": 12.937875,
         "lng": 77.555568
       },
-      "temp": 25.87,
+      "temp": 24.52,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.87,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:15.983038+00:00"
+        "temperature": 24.52,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:07.377720+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -94234,12 +94234,12 @@
         "lat": 12.920215,
         "lng": 77.56045
       },
-      "temp": 25.87,
+      "temp": 24.52,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.87,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:16.385317+00:00"
+        "temperature": 24.52,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:07.805196+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -98739,12 +98739,12 @@
         "lat": 12.929744,
         "lng": 77.617937
       },
-      "temp": 25.02,
+      "temp": 24.1,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.02,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:16.852010+00:00"
+        "temperature": 24.1,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:08.263669+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -101716,12 +101716,12 @@
         "lat": 12.918152,
         "lng": 77.589271
       },
-      "temp": 25.02,
+      "temp": 24.1,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.02,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:17.295698+00:00"
+        "temperature": 24.1,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:08.697505+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -104189,12 +104189,12 @@
         "lat": 13.000864,
         "lng": 77.718163
       },
-      "temp": 24.64,
+      "temp": 24.25,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 24.64,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:17.710341+00:00"
+        "temperature": 24.25,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:09.120413+00:00"
       },
       "geometry": {
         "type": "Polygon",
@@ -116478,12 +116478,12 @@
         "lat": 12.895932,
         "lng": 77.621885
       },
-      "temp": 25.02,
+      "temp": 24.1,
       "temp_source": "tomorrow.io",
       "weather": {
-        "temperature": 25.02,
-        "observed_at": "2026-04-10T20:10:00Z",
-        "fetched_at": "2026-04-10T20:10:18.146199+00:00"
+        "temperature": 24.1,
+        "observed_at": "2026-04-11T02:28:00Z",
+        "fetched_at": "2026-04-11T02:28:09.546741+00:00"
       },
       "geometry": {
         "type": "Polygon",
