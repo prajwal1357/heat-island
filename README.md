@@ -1,8 +1,8 @@
 # ThermiQ: Urban Heat Island Command Center
 
-> 🎯 **[View Project Presentation & Demo Video (Google Drive)](https://drive.google.com/drive/folders/1-V3PDQc-aLB9P9ffz8T17iTCs6NJrykT?usp=sharing)**
+> 🎯 **[View Project Presentation &amp; Demo Video (Google Drive)](https://drive.google.com/drive/folders/1-V3PDQc-aLB9P9ffz8T17iTCs6NJrykT?usp=sharing)**
 
-ThermiQ is a real-time, AI-driven dashboard that models and mitigates the Urban Heat Island (UHI) effect across Bengaluru's 28 constituencies. 
+ThermiQ is a real-time, AI-driven dashboard that models and mitigates the Urban Heat Island (UHI) effect across Bengaluru's 28 constituencies.
 
 Built with a **FastAPI backend** and a **React/D3.js frontend**, this platform allows city planners to simulate the exact thermal benefits of deploying tree cover, cool roofs, and reflective pavements. It uses an active Machine Learning engine to ensure interventions are modeled according to physical thermodynamics, and features an integrated **LLM AI Planner** that dynamically optimizes municipal budgets based on strict cost vs. cooling efficiency limits (δT / ₹Cr).
 
@@ -23,6 +23,7 @@ Built with a **FastAPI backend** and a **React/D3.js frontend**, this platform a
 ## ⚙️ Quick Start Setup
 
 ### 1. Start the Backend server (FastAPI)
+
 ```bash
 cd backend
 python -m venv venv
@@ -30,9 +31,11 @@ python -m venv venv
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
+
 *Note: Make sure to duplicate `.env.example` into `.env` and input your `Tomorrow.io` API key inside the backend folder.*
 
 ### 2. Start the Frontend (React / Vite)
+
 ```bash
 cd frontend
 npm install
@@ -40,7 +43,9 @@ npm run dev
 ```
 
 ### 3. (Optional) Start the Local LLM Brain
+
 To use the Generative Planner feature, simply install [Ollama](https://ollama.com) on your machine and start it locally in the background!
+
 ```bash
 ollama run mistral
 ```

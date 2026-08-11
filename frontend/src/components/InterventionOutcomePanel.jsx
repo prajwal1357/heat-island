@@ -107,6 +107,7 @@ export default function InterventionOutcomePanel({ selectedZone }) {
 
   const activeInterventions = getActiveInterventions({ greenCoverDelta, coolRoof, reflectivePavement });
   const hasIntervention = activeInterventions.length > 0;
+  const areaFactor = Math.max((selectedZone.area_sq_km || 25) / 25.0, 0.5);
   const modelReadout = buildModelReadout(prediction);
 
   return (
@@ -145,7 +146,7 @@ export default function InterventionOutcomePanel({ selectedZone }) {
         >
           <div>
             <div className="font-bold text-sm text-slate-300">Cool Roof System</div>
-            <div className="text-xs text-slate-500 mt-1 font-medium">Reflects solar radiation (Rs 0.5 Cr)</div>
+            <div className="text-xs text-slate-500 mt-1 font-medium">Reflects solar radiation (Rs {(0.5 * areaFactor).toFixed(2)} Cr)</div>
           </div>
           <div className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${coolRoof ? "bg-teal-500 shadow-lg shadow-teal-500/20" : "bg-slate-700"}`}>
             <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${coolRoof ? "translate-x-5" : "translate-x-0"}`}></div>
@@ -159,7 +160,7 @@ export default function InterventionOutcomePanel({ selectedZone }) {
         >
           <div>
             <div className="font-bold text-sm text-slate-300">Reflective Pavement</div>
-            <div className="text-xs text-slate-500 mt-1 font-medium">Lighten street surface (Rs 0.3 Cr)</div>
+            <div className="text-xs text-slate-500 mt-1 font-medium">Lighten street surface (Rs {(0.3 * areaFactor).toFixed(2)} Cr)</div>
           </div>
           <div className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${reflectivePavement ? "bg-teal-500 shadow-lg shadow-teal-500/20" : "bg-slate-700"}`}>
             <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${reflectivePavement ? "translate-x-5" : "translate-x-0"}`}></div>

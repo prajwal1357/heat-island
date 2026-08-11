@@ -2,6 +2,7 @@ import joblib
 import os
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import cross_val_score
 from ml.features import FEATURE_NAMES
 
 class TempModel:
@@ -13,6 +14,13 @@ class TempModel:
         X = df[FEATURE_NAMES]
         y = df["temp"]
         self.model.fit(X, y)
+        
+        # Cross-validation metrics for transparency
+        r2_scores = cross_val_score(self.model, X, y, cv=5, scoring="r2")
+        mae_scores = cross_val_score(self.model, X, y, cv=5, scoring="neg_mean_absolute_error")
+        print(f"  ML Model CV R²:  {r2_scores.mean():.4f} (±{r2_scores.std():.4f})")
+        print(f"  ML Model CV MAE: {-mae_scores.mean():.4f}°C (±{mae_scores.std():.4f})")
+        
         self.save()
 
     def save(self):
@@ -52,8 +60,10 @@ class TempModel:
 
     def rank_scenarios(self, grid: list):
         """
-        Sweep all 100 zones × all intervention combinations and returns a sorted DataFrame.
-        Cost model: green cover = ₹0.8Cr per 10%, cool roofs = ₹0.5Cr, reflective pavement = ₹0.3Cr.
+        Sweep all zones × all intervention combinations and returns a sorted DataFrame.
+        Cost model scales by constituency area (normalized to 25 km² median).
+        Cost formula: green cover = ₹0.8Cr per 10% × area_factor, cool roofs = ₹0.5Cr × area_factor, 
+        reflective pavement = ₹0.3Cr × area_factor.
         """
         results = []
         
@@ -64,6 +74,8 @@ class TempModel:
         
         for zone in grid:
             current_temp = zone["temp"]
+            area_sq_km = zone.get("area_sq_km", 25.0)
+            area_factor = max(area_sq_km / 25.0, 0.5)  # Normalize to median, floor at 0.5
             
             for gc_delta in green_cover_deltas:
                 for cool_roof in cool_roof_options:
@@ -81,10 +93,10 @@ class TempModel:
                         pred_temp = self.predict_intervention(zone, intervention)
                         delta_t = current_temp - pred_temp
                         
-                        # Apply cost model
-                        cost = (gc_delta / 10.0) * 0.8
-                        if cool_roof: cost += 0.5
-                        if ref_pave: cost += 0.3
+                        # Apply area-scaled cost model
+                        cost = (gc_delta / 10.0) * 0.8 * area_factor
+                        if cool_roof: cost += 0.5 * area_factor
+                        if ref_pave: cost += 0.3 * area_factor
                         
                         # Build description
                         ints_str = []

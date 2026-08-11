@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || "http://127.0.0.1:8000";
 
@@ -14,6 +14,23 @@ export default function PlannerPanel() {
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const [isAskingQuestion, setIsAskingQuestion] = useState(false);
+  const [llmOnline, setLlmOnline] = useState(null); // null = checking, true/false = result
+
+  useEffect(() => {
+    const checkLlm = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/llm-status`);
+        const data = await res.json();
+        setLlmOnline(data.online === true);
+      } catch {
+        setLlmOnline(false);
+      }
+    };
+    checkLlm();
+    // Re-check every 30 seconds
+    const interval = setInterval(checkLlm, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const totalCost = useMemo(() => {
     if (!planData?.plan?.length) {
@@ -97,6 +114,13 @@ export default function PlannerPanel() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             AI Urban Planner
+            {llmOnline === null ? (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">Checking LLM…</span>
+            ) : llmOnline ? (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 font-bold uppercase tracking-wider border border-emerald-500/20">LLM Online</span>
+            ) : (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-300 font-bold uppercase tracking-wider border border-red-500/20" title="Start Ollama with 'ollama run mistral'">LLM Offline</span>
+            )}
           </h2>
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest pl-7">Structured LLM Strategy</p>
         </div>
@@ -119,9 +143,10 @@ export default function PlannerPanel() {
 
           <button
             onClick={() => generatePlan(false)}
-            disabled={isLoading}
+            disabled={isLoading || llmOnline === false}
+            title={llmOnline === false ? "Start Ollama with 'ollama run mistral' to enable the AI Planner" : ""}
             className={`px-5 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg transition-all flex items-center gap-2 ${
-              isLoading
+              isLoading || llmOnline === false
                 ? "bg-slate-800 cursor-not-allowed opacity-80"
                 : "bg-gradient-to-r from-teal-500 to-teal-600 hover:scale-105 active:scale-95 border border-teal-400/20 shadow-teal-500/20"
             }`}
@@ -131,6 +156,8 @@ export default function PlannerPanel() {
                 <div className="w-4 h-4 border-2 border-slate-400 border-t-white rounded-full animate-spin" />
                 Drafting
               </>
+            ) : llmOnline === false ? (
+              "LLM Offline"
             ) : (
               "Draft Strategy"
             )}

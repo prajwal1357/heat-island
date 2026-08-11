@@ -6,7 +6,21 @@ import requests
 
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
+OLLAMA_HEALTH_URL = "http://localhost:11434/"
 OLLAMA_MODEL = "mistral"
+
+
+def check_ollama_health() -> dict:
+    """Check if Ollama is reachable and return status info."""
+    try:
+        response = requests.get(OLLAMA_HEALTH_URL, timeout=3)
+        return {"online": response.status_code == 200, "status_code": response.status_code}
+    except requests.ConnectionError:
+        return {"online": False, "error": "Connection refused. Ollama is not running."}
+    except requests.Timeout:
+        return {"online": False, "error": "Connection timed out."}
+    except Exception as exc:
+        return {"online": False, "error": str(exc)}
 
 
 def build_system_prompt(budget_crore: float) -> str:

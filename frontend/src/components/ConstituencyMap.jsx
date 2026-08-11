@@ -96,7 +96,7 @@ export default function ConstituencyMap({ zones, selectedZoneId, onSelectZone })
         <div>
           <h2 className="text-lg font-bold tracking-tight text-white">Bengaluru Constituency Heatmap</h2>
           <p className="text-sm text-slate-400 mt-1">
-            25 core assembly constituencies rendered from the cached GeoJSON source.
+            28 assembly constituencies rendered from the cached GeoJSON source.
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs font-semibold tracking-wider">

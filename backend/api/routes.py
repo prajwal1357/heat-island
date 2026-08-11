@@ -5,7 +5,7 @@ from api.schemas import PredictRequest, PredictResponse, AskPlannerRequest, Plan
 from data.generator import generate_training_data
 from data.weather_cache import read_live_weather_cache, refresh_live_weather_cache
 from ml.model import TempModel
-from planner.planner_engine import build_system_prompt, build_user_prompt, generate_plan, answer_plan_question
+from planner.planner_engine import build_system_prompt, build_user_prompt, generate_plan, answer_plan_question, check_ollama_health
 
 router = APIRouter()
 
@@ -16,12 +16,13 @@ def _clean_zero(value: float | None) -> float | None:
     return 0.0 if abs(value) < 0.005 else round(value, 2)
 
 
-def _calculate_cost(green_cover_delta: float, cool_roof: bool, reflective_pavement: bool) -> float:
-    cost = (green_cover_delta / 10.0) * 0.8
+def _calculate_cost(green_cover_delta: float, cool_roof: bool, reflective_pavement: bool, area_sq_km: float = 25.0) -> float:
+    area_factor = max(area_sq_km / 25.0, 0.5)  # Normalize to median, floor at 0.5
+    cost = (green_cover_delta / 10.0) * 0.8 * area_factor
     if cool_roof:
-        cost += 0.5
+        cost += 0.5 * area_factor
     if reflective_pavement:
-        cost += 0.3
+        cost += 0.3 * area_factor
     return round(cost, 2)
 
 
@@ -93,6 +94,7 @@ def _strict_subset_variants(payload: PredictRequest) -> list[dict]:
 
 
 def _analyze_prediction(model: TempModel, zone: dict, payload: PredictRequest, predicted_temp: float, delta_t: float) -> dict:
+    area_sq_km = zone.get("area_sq_km", 25.0)
     active = _active_interventions(
         payload.green_cover_delta,
         payload.cool_roof,
@@ -102,6 +104,7 @@ def _analyze_prediction(model: TempModel, zone: dict, payload: PredictRequest, p
         payload.green_cover_delta,
         payload.cool_roof,
         payload.reflective_pavement,
+        area_sq_km,
     )
     cooling_per_crore = _clean_zero(delta_t / estimated_cost) if estimated_cost > 0 else 0.0
 
@@ -113,6 +116,7 @@ def _analyze_prediction(model: TempModel, zone: dict, payload: PredictRequest, p
             variant["green_cover_delta"],
             variant["cool_roof"],
             variant["reflective_pavement"],
+            area_sq_km,
         )
         alt_active = _active_interventions(
             variant["green_cover_delta"],
@@ -186,10 +190,10 @@ def get_grid(request: Request):
 
 
 @router.post("/refresh-weather")
-def refresh_weather(request: Request):
-    """Refreshes all constituency temperatures from Tomorrow.io and retrains the ML model."""
+async def refresh_weather(request: Request):
+    """Refreshes all constituency temperatures from Tomorrow.io (async) and retrains the ML model."""
     try:
-        cache_payload = refresh_live_weather_cache()
+        cache_payload = await refresh_live_weather_cache()
         request.app.state.grid = cache_payload["zones"]
         _retrain_model(request)
         return cache_payload
@@ -240,9 +244,22 @@ def scenarios(request: Request):
     
     return top_15.to_dict(orient="records")
 
+@router.get("/llm-status")
+def llm_status():
+    """Check if the Ollama LLM engine is reachable."""
+    return check_ollama_health()
+
 @router.post("/ask-planner", response_model=PlannerResponse)
 async def ask_planner(payload: AskPlannerRequest, request: Request):
     """Builds a compact ML shortlist and asks the planner LLM for a final JSON plan."""
+    # Pre-check: Is Ollama running?
+    health = check_ollama_health()
+    if not health["online"]:
+        raise HTTPException(
+            status_code=503,
+            detail="LLM engine offline. Please start Ollama with 'ollama run mistral'.",
+        )
+
     model = request.app.state.model
     grid = _sync_grid_state(request)
     
@@ -262,8 +279,17 @@ async def ask_planner(payload: AskPlannerRequest, request: Request):
 
 @router.post("/chat-plan-question", response_model=PlanQuestionResponse)
 async def chat_plan_question(payload: PlanQuestionRequest):
+    # Pre-check: Is Ollama running?
+    health = check_ollama_health()
+    if not health["online"]:
+        raise HTTPException(
+            status_code=503,
+            detail="LLM engine offline. Please start Ollama with 'ollama run mistral'.",
+        )
+
     try:
         answer = answer_plan_question(payload.plan_context, payload.question)
         return PlanQuestionResponse(answer=answer)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"QA failed: {exc}") from exc
+
